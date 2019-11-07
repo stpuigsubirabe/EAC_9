@@ -7,6 +7,11 @@
 package principal;
 
 import components.Treballador;
+import components.Dissenyador;
+import components.Jardiner;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -19,9 +24,13 @@ public class Projecte implements Component {
     private String nifClient;
     private boolean finalitzat;
     private double pressupost;
+    private Map <String,Treballador> treballadors = new HashMap <>();
+    //Declarem un iterador per poder operar el HashMap treballadors.
+    Iterator iteradorTreballadors = treballadors.keySet().iterator();
+    /* AIXO DESAPAREIX AMB LA NOVA IMPLEMENTACIO
     private Treballador[] treballadors = new Treballador[41];
     private int posicioTreballadors = 0; //Primera posició buida del vector treballadors
-    
+    */
      /*
      TODO
      CONSTRUCTOR
@@ -95,22 +104,25 @@ public class Projecte implements Component {
         this.pressupost = pressupost;
     }
 
-    public Treballador[] getTreballadors() {
+    public Map <String,Treballador> getTreballadors() {
         return treballadors;
     }
 
-    public void setTreballadors(Treballador[] treballadors) {
+    public void setTreballadors(Map <String,Treballador> treballadors) {
         this.treballadors = treballadors;
     }
 
+    /* AQUESTS MÉTODES DESAPAREIXEN AMB LA NOVA IMPLEMENTACIÓ
+    ----------------------------------------------------------------------------
+    
     public int getPosicioTreballadors() {
         return posicioTreballadors;
     }
-
+        
     public void setPosicioTreballadors(int posicioTreballadors) {
         this.posicioTreballadors = posicioTreballadors;
     }
-
+    */
     /*
      TODO
      Paràmetres: cap
@@ -147,6 +159,7 @@ public class Projecte implements Component {
      i en cas contrari, el missatge "\nEl projecte no està finalitzat".
      Retorn: cap
      */
+    @Override
     public void updateComponent() {
 
         System.out.println("\nNIF del client: " + nifClient);
@@ -183,11 +196,16 @@ public class Projecte implements Component {
      Retorn: cap
      */
     public void addTreballador(Treballador treballador) {
-        treballadors[posicioTreballadors] = treballador;
-        posicioTreballadors++;
+        
+        //nombreMap.put(K clave, V valor); // Añade un elemento al Map
+        if (treballador instanceof Dissenyador){
+            treballadors.put("dissenyador", treballador);
+        }else if (treballador instanceof Jardiner){
+            treballadors.put(treballador.getNif(), treballador);
+        }
     }
 
-    public void showComponent() {
+    public void showComponent() throws GestorEstudisException {
         System.out.println("\nLes dades del projecte amb codi " + codi + " són:");
         System.out.println("\nNIF client: " + nifClient);
         System.out.println("\nPressupost: " + pressupost);

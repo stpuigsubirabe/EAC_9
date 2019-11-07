@@ -5,6 +5,7 @@ import components.Jardiner;
 import components.Torn;
 import java.util.Scanner;
 import persistencia.GestorPersistencia;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -21,10 +22,12 @@ public class Application {
     static private GestorPersistencia gp = new GestorPersistencia();
 
     public static void main(String[] args) {
-        menuPrincipal();
+            try{
+                menuPrincipal();
+            }catch(GestorEstudisException e){System.out.println(e.getMessage());}
     }
 
-    private static void menuPrincipal() {
+    private static void menuPrincipal() throws GestorEstudisException {
         int opcio = 0;
 
         do {
@@ -35,8 +38,11 @@ public class Application {
             System.out.println("\n3. Gestió de dissenyadors o dissenyadores");
             System.out.println("\n4. Gestió de jardiners o jardineres");
             System.out.println("\n5. Gestió de torns");
-            opcio = DADES.nextInt();
-
+            try{
+                opcio = DADES.nextInt();
+            }catch(Exception e){
+                if (e instanceof InputMismatchException){throw new GestorEstudisException("1"); }
+            }
             switch (opcio) {
                 case 0:
                     break;
@@ -78,7 +84,7 @@ public class Application {
         } while (opcio != 0);
     }
 
-    public static void menuEstudis() {
+    public static void menuEstudis() throws GestorEstudisException {
         int opcio = 0;
 
         do {
@@ -96,7 +102,9 @@ public class Application {
                 case 0:
                     break;
                 case 1:
+                    try{ 
                     estudis[posicioEstudis] = Estudi.addEstudi();
+                    }catch(ArrayIndexOutOfBoundsException e){ throw new GestorEstudisException("9");} 
                     posicioEstudis++;
                     break;
                 case 2:
@@ -162,7 +170,7 @@ public class Application {
      no controlem que l'usuari introdueixi una opció numèrica, ja que això ho farem amb la
      tècnica de les excepcions que veurem més endavant
      */
-    public static void menuComponents(int tipus) {
+    public static void menuComponents(int tipus)throws GestorEstudisException {
         int opcio = 0;
 
         do {
@@ -204,13 +212,19 @@ public class Application {
                     break;
                 case 3:
                     if (tipus == 2) {
+                        try{
                         estudiActual.addTornJardiner();
+                        }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                     } else {
                         for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
                             if (estudiActual.getComponents()[i] instanceof Dissenyador && tipus == 1) {
+                                try{
                                 estudiActual.getComponents()[i].showComponent();
+                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                             } else if (estudiActual.getComponents()[i] instanceof Torn && tipus == 3) {
+                                try{
                                 estudiActual.getComponents()[i].showComponent();
+                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                             }
                         }
                     }
@@ -218,7 +232,9 @@ public class Application {
                 case 4:
                     for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
                         if (estudiActual.getComponents()[i] instanceof Jardiner) {
-                            estudiActual.getComponents()[i].showComponent();
+                            try{
+                                estudiActual.getComponents()[i].showComponent();
+                            }catch(GestorEstudisException e){ System.out.println(e.getMessage());}
                         }
                     }
                 default:
@@ -250,7 +266,7 @@ public class Application {
      no controlem que l'usuari introdueixi una opció numèrica, ja que això ho farem amb la
      tècnica de les excepcions que veurem més endavant
      */
-    public static void menuProjectes() {
+    public static void menuProjectes() throws GestorEstudisException  {
         int opcio = 0;
 
         do {
@@ -277,7 +293,7 @@ public class Application {
                     }
                     break;
                 case 3:
-                    estudiActual.addTreballadorProjecte(1);
+                    estudiActual.addTreballadorProjecte(1);                    
                     break;
                 case 4:
                     estudiActual.addTreballadorProjecte(2);

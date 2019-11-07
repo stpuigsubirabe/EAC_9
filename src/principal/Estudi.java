@@ -9,6 +9,9 @@ import components.Dissenyador;
 import components.Jardiner;
 import components.Torn;
 import components.Treballador;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -20,9 +23,14 @@ public class Estudi implements Component {
     private static int properCodi = 1; //El proper codi a assignar
     private String nom;
     private String adreca;
+    List <Component> components = new ArrayList <>();
+    //Declarem un iterador per poder operar el ArrayList components.
+    Iterator<Component> iteradorComponents = components.iterator();
+
+/* AIXO DESAPAREIX AMB LA NOVA IMPLEMENTACIO
     private Component[] components = new Component[160];
     private int posicioComponents = 0; //Priemra posició buida del vector components
-
+*/
     /*
      TODO
      CONSTRUCTOR
@@ -80,24 +88,27 @@ public class Estudi implements Component {
     public void setAdreca(String adreca) {
         this.adreca = adreca;
     }
-
-    public Component[] getComponents() {
+//CANVI Component[] per List <Component>
+    
+    public List <Component> getComponents() {
         return components;
     }
 
-    public void setComponents(Component[] components) {
+    public void setComponents(List <Component> components) {
         this.components = components;
     }
 
+    /* AQUESTS METODES DESAPAREIXEN ARA FEM SERVIR L'ITERADOR
+    ----------------------------------------------------------------------------
     public int getPosicioComponents() {
         return posicioComponents;
     }
-
+    
     public void setPosicioComponents(int posicioComponents) {
         this.posicioComponents = posicioComponents;
     }
-
-
+    */
+    
     /*
     TODO
      Paràmetres: cap
@@ -132,6 +143,7 @@ public class Estudi implements Component {
      actual, abans de modificar-los.
      Retorn: cap
      */
+    @Override
     public void updateComponent() {
 
         System.out.println("\nNom de l'estudi: " + nom);
@@ -141,7 +153,7 @@ public class Estudi implements Component {
         System.out.println("\nEntra la nova adreça:");
         adreca = DADES.next();
     }
-
+    @Override
     public void showComponent() {
         System.out.println("\nLes dades de l'estudi amb codi " + codi + " són:");
         System.out.println("\nNom: " + nom);
@@ -167,10 +179,9 @@ public class Estudi implements Component {
     public void addDissenyador() {
 
         Dissenyador nouDissenyador = Dissenyador.addDissenyador();
-
-        if (selectComponent(1, nouDissenyador.getNif()) == -1) {
-            components[posicioComponents] = nouDissenyador;
-            posicioComponents++;
+        
+        if (selectComponent(1, nouDissenyador.getNif()) == -1) {            
+            components.add(nouDissenyador);            
         } else {
             System.out.println("\nEl dissenyador o dissenyadora ja existeix");
         }
@@ -197,8 +208,7 @@ public class Estudi implements Component {
         Jardiner nouJardiner = Jardiner.addJardiner();
 
         if (selectComponent(2, nouJardiner.getNif()) == -1) {
-            components[posicioComponents] = nouJardiner;
-            posicioComponents++;
+            components.add(nouJardiner);
         } else {
             System.out.println("\nEl jardiner o jardinera ja existeix");
         }
@@ -223,8 +233,7 @@ public class Estudi implements Component {
         Torn nouTorn = Torn.addTorn();
 
         if (selectComponent(3, nouTorn.getCodi()) == -1) {
-            components[posicioComponents] = nouTorn;
-            posicioComponents++;
+            components.add(nouTorn);    
         } else {
             System.out.println("\nEl torn ja existeix");
         }
@@ -250,8 +259,7 @@ public class Estudi implements Component {
         Projecte nouProjecte = Projecte.addProjecte();
 
         if (selectComponent(4, nouProjecte.getCodi()) == -1) {
-            components[posicioComponents] = nouProjecte;
-            posicioComponents++;
+            components.add(nouProjecte);
         } else {
             System.out.println("\nEl projecte ja existeix");
         }
@@ -280,10 +288,39 @@ public class Estudi implements Component {
             id = DADES.next();
         }
 
+       
         int posElement = -1; //Posició que ocupa el component seleccionat dins el vector de components de l'estudi
-
-        //Seleccionem la posició que ocupa el component dins el vector de components
+        
+        //Seleccionem la posició que ocupa el component dins el ArrayList de components
         // de l'estudi
+        // COMPAREM EL ID PASSAT PER TECLAT AMB LOS COMPONENTS DE ARRAYLIST PER VEURE SI EL TROBEM
+        
+        while(iteradorComponents.hasNext()){
+            
+            Component component = iteradorComponents.next();
+            
+            if (component instanceof Dissenyador && tipusComponent == 1){
+                if (((Dissenyador)component).getNif().equals(id)){
+                    return components.indexOf(component);
+                }
+            }else if(component instanceof Jardiner && tipusComponent == 2){
+                if (((Jardiner)component).getNif().equals(id)){
+                    return components.indexOf(component);
+                }
+            }else if (component instanceof Torn && tipusComponent == 3){
+                if (((Torn)component).getCodi().equals(id)){
+                    return components.indexOf(component);
+                }
+            }else if (component instanceof Projecte && tipusComponent == 4){
+                if (((Projecte)component).getCodi()== (Integer)(id)){
+                    return components.indexOf(component);
+                }
+            }
+        }
+        
+        /* AQUEST CODI DESAPAREIX AMB LA NOVA IMPELMENTACIO
+        ------------------------------------------------------------------------
+        
         for (int i = 0; i < posicioComponents; i++) {
             if (components[i] instanceof Dissenyador && tipusComponent == 1) {
                 if (((Dissenyador) components[i]).getNif().equals(id)) {
@@ -303,41 +340,44 @@ public class Estudi implements Component {
                 }
             }
         }
-
+        */
+        
+        
         return posElement;
+        
     }
 
-    public void addTornJardiner() {
+    public void addTornJardiner() throws GestorEstudisException {
 
         Jardiner jardinerSel = null;
         int pos = selectComponent(2, null);
 
         if (pos >= 0) {
 
-            jardinerSel = (Jardiner) this.getComponents()[pos];
+            jardinerSel = (Jardiner) components.get(pos);
 
             pos = selectComponent(3, null);
 
             if (pos >= 0) {
-                jardinerSel.setTorn((Torn) getComponents()[pos]);
+                jardinerSel.setTorn((Torn) components.get(pos));
             } else {
-                System.out.println("\nNo existeix aquest torn");
+                throw new GestorEstudisException("5");
             }
 
         } else {
-            System.out.println("\nNo existeix aquest jardiner o jardinera");
+            throw new GestorEstudisException("6");
         }
 
     }
-
-    public void addTreballadorProjecte(int tipus) {
+    // PER ARRECLAR AQUEST METODE PRIMER HAIG DE ARREGLAR LA CLASSE PROJECTE
+    public void addTreballadorProjecte(int tipus) throws GestorEstudisException {
         boolean trobat = false;
         Projecte projecteSel = null;
         int pos = selectComponent(4, null);
 
         if (pos >= 0) {
 
-            projecteSel = (Projecte) this.getComponents()[pos];
+            projecteSel = (Projecte) components.get(pos);
 
             pos = selectComponent(tipus, null);
 
@@ -345,13 +385,13 @@ public class Estudi implements Component {
                 if (tipus == 1) {
                     for (int i = 0; i < projecteSel.getPosicioTreballadors() && !trobat; i++) {
                         if (projecteSel.getTreballadors()[i] instanceof Dissenyador) {
-                            System.out.println("\nEl projecte ja té assignat un dissenyador o dissenyadora");
                             trobat = true;
+                            throw new GestorEstudisException("3");    
                         }else { //És jardine
                             for (int j = 0; j < projecteSel.getPosicioTreballadors() && !trobat; j++) {
                                 if (((Treballador) getComponents()[pos]).equals(projecteSel.getTreballadors()[j])) {
-                                    System.out.println("\nAquest jardiner ja està assignat al projecte");
                                     trobat = true;
+                                    throw new GestorEstudisException("4");
                                 }
                             }
                         }
@@ -362,11 +402,11 @@ public class Estudi implements Component {
                     projecteSel.addTreballador((Treballador)getComponents()[pos]);
                 }
             } else {
-                System.out.println("\nNo existeix aquest treballador o treballadora");
+                throw new GestorEstudisException("7") ;
             }
 
         } else {
-            System.out.println("\nNo existeix aquest projecte");
+            throw new GestorEstudisException("8");
         }
     }
 

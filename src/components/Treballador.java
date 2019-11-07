@@ -1,6 +1,7 @@
 package components;
 
 import principal.Component;
+import principal.GestorEstudisException;
 
 /**
  *
@@ -68,7 +69,7 @@ public abstract class Treballador implements Component {
         }
     }
     
-    public void showComponent() {
+    public void showComponent()throws GestorEstudisException{
         System.out.println("\nLes dades del treballador o treballadora amb nif " + nif + " són:");
         System.out.println("\nNom: " + nom);
         System.out.println("\nL'estat és: ");

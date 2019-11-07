@@ -4,6 +4,7 @@
  * de baixa o vacances.
  */
 package components;
+import principal.GestorEstudisException;
 
 /**
  *
@@ -57,9 +58,10 @@ public class Jardiner extends Treballador{
         return new Jardiner(nif, nom);
     }
 
-
-    public void showComponent() {
+    @Override
+    public void showComponent() throws GestorEstudisException {
         super.showComponent();
+        if (this.getTorn()== null){ throw new GestorEstudisException("2");}
         torn.showComponent();
     }
 }
