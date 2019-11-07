@@ -12,6 +12,7 @@ import components.Jardiner;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  *
@@ -204,7 +205,7 @@ public class Projecte implements Component {
             treballadors.put(treballador.getNif(), treballador);
         }
     }
-
+    @Override
     public void showComponent() throws GestorEstudisException {
         System.out.println("\nLes dades del projecte amb codi " + codi + " són:");
         System.out.println("\nNIF client: " + nifClient);
@@ -215,9 +216,11 @@ public class Projecte implements Component {
         }else{
             System.out.println("\nEl projecte no està finalitzat");
         }
-
-        for (int i = 0; i < posicioTreballadors; i++) {
-            treballadors[i].showComponent();
+       
+        for (Entry <String, Treballador> treballador : treballadors.entrySet()){
+        String key = treballador.getKey();
+        
+        treballadors.get(key).showComponent();            
         }
     }
     
