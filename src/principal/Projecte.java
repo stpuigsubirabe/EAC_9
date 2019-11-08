@@ -217,10 +217,9 @@ public class Projecte implements Component {
             System.out.println("\nEl projecte no està finalitzat");
         }
        
-        for (Entry <String, Treballador> treballador : treballadors.entrySet()){
-        String key = treballador.getKey();
-        
-        treballadors.get(key).showComponent();            
+        while (iteradorTreballadors.hasNext()) {
+            String key = (String) iteradorTreballadors.next();
+            treballadors.get(key).showComponent();            
         }
     }
     

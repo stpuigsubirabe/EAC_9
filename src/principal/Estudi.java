@@ -311,8 +311,8 @@ public class Estudi implements Component {
                 if (((Torn)component).getCodi().equals(id)){
                     return components.indexOf(component);
                 }
-            }else if (component instanceof Projecte && tipusComponent == 4){
-                if (((Projecte)component).getCodi()== (Integer)(id)){
+            }else if (component instanceof Projecte && tipusComponent == 4){    
+                if (((Projecte)component).getCodi()== Integer.parseInt((String) id)){
                     return components.indexOf(component);
                 }
             }
@@ -383,6 +383,27 @@ public class Estudi implements Component {
 
             if (pos >= 0) {
                 if (tipus == 1) {
+                        while(projecteSel.iteradorTreballadors.hasNext()&& !trobat){
+                            String key = (String) projecteSel.iteradorTreballadors.next();
+                            // Si algun treballador del projecte té la clau "Dissenyador" ja té dissenyador assignat
+                            if(key.equals("dissenyador")){
+                                trobat = true;
+                                throw new GestorEstudisException("3");
+                            }
+                        }    
+                    }else{
+                        while(projecteSel.iteradorTreballadors.hasNext()&& !trobat){
+                            
+                        // Busquem el nif del Jardiner dins de components i el comparem amb les claus del MapTreballadors del projecte
+                        String key = ((Jardiner)components.get(pos)).getNif();
+                            if(key.equals((String) projecteSel.iteradorTreballadors.next())){
+                                trobat = true;
+                                throw new GestorEstudisException("4");
+                            }        
+                        }
+                    }
+                        /*
+                        AQUEST CODI DESAPAREIX AMB LES NOVES IMPLEMENTACIONS
                     for (int i = 0; i < projecteSel.getPosicioTreballadors() && !trobat; i++) {
                         if (projecteSel.getTreballadors()[i] instanceof Dissenyador) {
                             trobat = true;
@@ -396,11 +417,19 @@ public class Estudi implements Component {
                             }
                         }
                     }
-                }
+                    */
+            
 
-                if (!trobat) {
-                    projecteSel.addTreballador((Treballador)getComponents()[pos]);
-                }
+        }if (!trobat) {
+                    //projecteSel.addTreballador((Treballador)getComponents()[pos]);
+                    if ((components.get(pos))instanceof Dissenyador){
+                        projecteSel.getTreballadors().put("dissenyador", (components.get(pos)));
+                    }else if ((components.get(pos))instanceof Jardiner){
+                        String nif = ((Jardiner)components.get(pos)).getNif();        
+                        projecteSel.getTreballadors().put(nif, (components.get(pos)));
+                    }
+                    
+                
             } else {
                 throw new GestorEstudisException("7") ;
             }
