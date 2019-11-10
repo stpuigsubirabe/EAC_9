@@ -268,7 +268,7 @@ public class Estudi implements Component {
         }
     }
 
-    public int selectComponent(int tipusComponent, Object id) {
+    public int selectComponent(int tipusComponent, Object id)  {
 
         if (id == null) {
             //Demanem quin tipus de component vol seleccionar i el seu identificador (id)
@@ -287,7 +287,6 @@ public class Estudi implements Component {
                     System.out.println("Codi del projecte?:");
                     break;
             }
-
             id = DADES.next();
         }
 
@@ -387,52 +386,29 @@ public class Estudi implements Component {
 
             if (pos >= 0) {
                 if (tipus == 1) {
-                        while(projecteSel.iteradorTreballadors.hasNext()&& !trobat){
-                            String key = (String) projecteSel.iteradorTreballadors.next();
-                            // Si algun treballador del projecte té la clau "Dissenyador" ja té dissenyador assignat
-                            if(key.equals("dissenyador")){
+                        if(projecteSel.getTreballadors().containsKey("dissenyador")){
+                            // Si algun treballador del projecte té la clau "Dissenyador" ja té dissenyador assignat   
                                 trobat = true;
                                 throw new GestorEstudisException("3");
-                            }
-                        }    
+                            }                            
                     }else{
-                        while(projecteSel.iteradorTreballadors.hasNext()&& !trobat){
-                            
+                    
                         // Busquem el nif del Jardiner dins de components i el comparem amb les claus del MapTreballadors del projecte
-                        String key = ((Jardiner)components.get(pos)).getNif();
-                            if(key.equals((String) projecteSel.iteradorTreballadors.next())){
+                        String nif = ((Jardiner)components.get(pos)).getNif();
+                            if(projecteSel.getTreballadors().containsKey(nif)){
                                 trobat = true;
-                                throw new GestorEstudisException("4");
-                            }        
+                                throw new GestorEstudisException("4");                               
                         }
                     }
-                        /*
-                        AQUEST CODI DESAPAREIX AMB LES NOVES IMPLEMENTACIONS
-                    for (int i = 0; i < projecteSel.getPosicioTreballadors() && !trobat; i++) {
-                        if (projecteSel.getTreballadors()[i] instanceof Dissenyador) {
-                            trobat = true;
-                            throw new GestorEstudisException("3");    
-                        }else { //És jardine
-                            for (int j = 0; j < projecteSel.getPosicioTreballadors() && !trobat; j++) {
-                                if (((Treballador) getComponents()[pos]).equals(projecteSel.getTreballadors()[j])) {
-                                    trobat = true;
-                                    throw new GestorEstudisException("4");
-                                }
-                            }
-                        }
-                    }
-                    */
             
-
-        }if (!trobat) {
-                    //projecteSel.addTreballador((Treballador)getComponents()[pos]);
+            }if (!trobat) {
+            
                     if ((components.get(pos))instanceof Dissenyador){
                         projecteSel.getTreballadors().put("dissenyador", ((Dissenyador)components.get(pos)));
                     }else if ((components.get(pos))instanceof Jardiner){
                         String nif = ((Jardiner)components.get(pos)).getNif();        
                         projecteSel.getTreballadors().put(nif, ((Jardiner)components.get(pos)));
-                    }
-                    
+                    }        
                 
             } else {
                 throw new GestorEstudisException("7") ;

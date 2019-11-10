@@ -98,7 +98,9 @@ public class Application {
             System.out.println("\n4. Llista d'estudis");
             System.out.println("\n5. Carregar estudi");
             System.out.println("\n6. Desar estudi");
+            try{
             opcio = DADES.nextInt();
+            }catch(InputMismatchException e){throw new GestorEstudisException("1");}
             switch (opcio) {
                 case 0:
                     break;
@@ -185,8 +187,9 @@ public class Application {
             } else {
                 System.out.println("\n3. Llista");
             }
-
+            try{
             opcio = DADES.nextInt();
+            }catch(InputMismatchException e){throw new GestorEstudisException("1");}
             switch (opcio) {
                 case 0:
                     break;

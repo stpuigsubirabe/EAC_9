@@ -198,7 +198,6 @@ public class Projecte implements Component {
      */
     public void addTreballador(Treballador treballador) {
         
-        //nombreMap.put(K clave, V valor); // Añade un elemento al Map
         if (treballador instanceof Dissenyador){
             treballadors.put("dissenyador", treballador);
         }else if (treballador instanceof Jardiner){
