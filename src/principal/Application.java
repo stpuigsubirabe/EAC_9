@@ -6,6 +6,7 @@ import components.Torn;
 import java.util.Scanner;
 import persistencia.GestorPersistencia;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 
 /**
  *
@@ -205,7 +206,7 @@ public class Application {
                 case 2:
                     int indexSel = estudiActual.selectComponent(tipus, null);
                     if (indexSel >= 0) {
-                        estudiActual.getComponents()[indexSel].updateComponent();
+                        estudiActual.getComponents().get(indexSel).updateComponent();
                     } else {
                         System.out.println("\nNo existeix aquest component");
                     }
@@ -216,6 +217,25 @@ public class Application {
                         estudiActual.addTornJardiner();
                         }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                     } else {
+                        Iterator<Component> iteradorComponents = estudiActual.getComponents().iterator();
+                        while (iteradorComponents.hasNext()){
+                            Component comp = iteradorComponents.next();
+                            if (comp instanceof Dissenyador && tipus == 1){
+                                try{
+                                    ((Dissenyador)comp).showComponent(); 
+                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
+                                
+                            }else if (comp instanceof Torn && tipus == 3){
+                                //try{
+                                    ((Torn)comp).showComponent();
+                                //}catch(GestorEstudisException e){System.out.println(e.getMessage());}
+                            
+                            }
+                        } 
+                        
+                    /* AQUEST CODI DESAPAREIX AMB LES NOVES IMPLEMENTACIONS
+        ---------------------------------------------------------------------------------------
+                            
                         for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
                             if (estudiActual.getComponents()[i] instanceof Dissenyador && tipus == 1) {
                                 try{
@@ -227,9 +247,23 @@ public class Application {
                                 }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                             }
                         }
+                    */    
                     }
+                       
                     break;
                 case 4:
+                    Iterator<Component> iteradorComponents = estudiActual.getComponents().iterator();
+                    while (iteradorComponents.hasNext()){
+                        Component comp = iteradorComponents.next();
+                            if (comp instanceof Jardiner ){
+                                try{
+                                    ((Jardiner) comp).showComponent();
+                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
+                            }
+                    }
+                    /*
+                    AQUEST CODI DESAPAREIX AMB LA NOVA IMPLEMENTACIO
+--------------------------------------------------------------------------------                    
                     for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
                         if (estudiActual.getComponents()[i] instanceof Jardiner) {
                             try{
@@ -237,6 +271,8 @@ public class Application {
                             }catch(GestorEstudisException e){ System.out.println(e.getMessage());}
                         }
                     }
+                    */
+                    break;
                 default:
                     System.out.println("\nS'ha de seleccionar una opció correcta del menú.");
                     break;
@@ -287,7 +323,7 @@ public class Application {
                 case 2:
                     int indexSel = estudiActual.selectComponent(4, null);
                     if (indexSel >= 0) {
-                        estudiActual.getComponents()[indexSel].updateComponent();
+                        estudiActual.getComponents().get(indexSel).updateComponent();
                     } else {
                         System.out.println("\nNo existeix aquest projecte");
                     }
@@ -299,11 +335,26 @@ public class Application {
                     estudiActual.addTreballadorProjecte(2);
                     break;
                 case 5:
+                    Iterator<Component> iteradorComponents = estudiActual.getComponents().iterator();
+                    while (iteradorComponents.hasNext()){
+                            if (iteradorComponents.next() instanceof Projecte){
+                                try{
+                                    for (int i=0;i<(estudiActual.getComponents().size());i++){
+                                        (estudiActual.getComponents().get(i)).showComponent();
+                                    }
+                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
+                                
+                            }
+                    }        
+                    /* aquest codi desapareix amb la nova implementacio
+--------------------------------------------------------------------------------                    
+                    
                     for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
                         if (estudiActual.getComponents()[i] instanceof Projecte) {
                             estudiActual.getComponents()[i].showComponent();
                         }
                     }
+                    */    
                     break;
                 default:
                     System.out.println("\nS'ha de seleccionar una opció correcta del menú.");

@@ -23,9 +23,10 @@ public class Estudi implements Component {
     private static int properCodi = 1; //El proper codi a assignar
     private String nom;
     private String adreca;
-    List <Component> components = new ArrayList <>();
-    //Declarem un iterador per poder operar el ArrayList components.
-    Iterator<Component> iteradorComponents = components.iterator();
+    private List <Component> components = new ArrayList <>();
+    //Declarem un iterador per poder operar el ArrayList components. 
+    //NO PODEM DEIXAR EL ITERADOR OBERT SI NO NO DEIXA ESCRIURE DINS LA COLECCIO
+    //private Iterator<Component> iteradorComponents = components.iterator();
 
 /* AIXO DESAPAREIX AMB LA NOVA IMPLEMENTACIO
     private Component[] components = new Component[160];
@@ -97,6 +98,7 @@ public class Estudi implements Component {
     public void setComponents(List <Component> components) {
         this.components = components;
     }
+   
 
     /* AQUESTS METODES DESAPAREIXEN ARA FEM SERVIR L'ITERADOR
     ----------------------------------------------------------------------------
@@ -123,7 +125,8 @@ public class Estudi implements Component {
 
         String nom;
         String adreca;
-
+        
+        DADES.nextLine(); //NETEJA DE BUFFER
         System.out.println("Nom de l'estudi:");
         nom = DADES.nextLine();
         System.out.println("Adreça de l'estudi:");
@@ -294,7 +297,7 @@ public class Estudi implements Component {
         //Seleccionem la posició que ocupa el component dins el ArrayList de components
         // de l'estudi
         // COMPAREM EL ID PASSAT PER TECLAT AMB LOS COMPONENTS DE ARRAYLIST PER VEURE SI EL TROBEM
-        
+        Iterator<Component> iteradorComponents = components.iterator();
         while(iteradorComponents.hasNext()){
             
             Component component = iteradorComponents.next();
@@ -311,10 +314,11 @@ public class Estudi implements Component {
                 if (((Torn)component).getCodi().equals(id)){
                     return components.indexOf(component);
                 }
-            }else if (component instanceof Projecte && tipusComponent == 4){    
-                if (((Projecte)component).getCodi()== Integer.parseInt((String) id)){
+            }else if (component instanceof Projecte && tipusComponent == 4 ){    
+                if (((Projecte)component).getCodi()== Integer.parseInt((String)id)){
                     return components.indexOf(component);
                 }
+                
             }
         }
         
@@ -423,10 +427,10 @@ public class Estudi implements Component {
         }if (!trobat) {
                     //projecteSel.addTreballador((Treballador)getComponents()[pos]);
                     if ((components.get(pos))instanceof Dissenyador){
-                        projecteSel.getTreballadors().put("dissenyador", (components.get(pos)));
+                        projecteSel.getTreballadors().put("dissenyador", ((Dissenyador)components.get(pos)));
                     }else if ((components.get(pos))instanceof Jardiner){
                         String nif = ((Jardiner)components.get(pos)).getNif();        
-                        projecteSel.getTreballadors().put(nif, (components.get(pos)));
+                        projecteSel.getTreballadors().put(nif, ((Jardiner)components.get(pos)));
                     }
                     
                 
