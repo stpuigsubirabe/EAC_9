@@ -148,10 +148,17 @@ public class GestorXML {
     private void fitxerEstudi() throws GestorEstudisException {
         
     }
+    /*
+    Retorna 1 si es actiu 0 si es no actiu
+    Retorna 1 si es projecte esta finalitzat 0 si no ho esta
+    */
     public int booleanToInt(boolean value) {
         // Convert true to 1 and false to 0.
         return value ? 1 : 0;
     }
+    /*
+    Construeix model per als dissenyadors
+    */
     public void dissenyadorToXML(Component comp, Node node ){
         Element dissenyador = doc.createElement("dissenyador");
         int actiu = booleanToInt (((Dissenyador)comp).getActiu());
@@ -160,6 +167,9 @@ public class GestorXML {
         dissenyador.setAttribute("nom", ((Dissenyador) comp).getNom());
         dissenyador.appendChild(node);
     }
+    /*
+    Construeix model per als jardiners
+    */
     public void jardinerToXML(Component comp, Node node ){
         Element jardiner = doc.createElement("jardiner");
         int actiu = booleanToInt (((Jardiner)comp).getActiu());
@@ -168,6 +178,9 @@ public class GestorXML {
         jardiner.setAttribute("nom", ((Jardiner) comp).getNom());
         jardiner.appendChild(node);
     }
+    /*
+    Construeix model per als torns
+    */
     public void tornToXML(Component comp, Node node ){
         Element torn = doc.createElement("torn");
         torn.setAttribute("codi", ((Torn) comp).getCodi());
@@ -176,6 +189,9 @@ public class GestorXML {
         torn.setAttribute("nom", ((Torn) comp).getNom());
         torn.appendChild(node);
     }
+    /*
+    Construeix model per als projectes
+    */
     public void projecteToXML(Component comp, Node node ){
         Element projecte = doc.createElement("projecte");
                 int codi = ((Projecte) comp).getCodi();
