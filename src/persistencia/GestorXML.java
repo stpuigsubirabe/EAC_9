@@ -14,7 +14,11 @@ import principal.Estudi;
 import principal.GestorEstudisException;
 import org.w3c.dom.Element;
 import principal.Component;
-
+import components.Dissenyador;
+import components.Jardiner;
+import components.Torn;
+import principal.Projecte;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -78,29 +82,58 @@ public class GestorXML {
         arrel.setAttribute("nom", estudi.getNom());
         doc.appendChild(arrel);
         
-        //Empezamos a leer elements para plasmar en doc todo el estudi 
+        //Llegim els elements de l'estudi per plasmar-los a doc  
+        while(iteradorComponents.hasNext()){
+            Component component = iteradorComponents.next();
+            if (component instanceof Dissenyador){
+                dissenyadorToXML(component,arrel);
+            }else if(component instanceof Jardiner){
+                Element jardiner = doc.createElement("jardiner");
+                int actiu = booleanToInt (((Jardiner)component).getActiu());
+                jardiner.setAttribute("actiu",  Integer.toString(actiu));
+                jardiner.setAttribute("nif", ((Jardiner) component).getNif());
+                jardiner.setAttribute("nom", ((Jardiner) component).getNom());
+                jardiner.appendChild(arrel);
+            }else if(component instanceof Torn){
+                Element torn = doc.createElement("torn");
+                torn.setAttribute("codi", ((Torn) component).getCodi());
+                torn.setAttribute("horaAcabament", ((Torn) component).getHoraAcabament());
+                torn.setAttribute("horaInici", ((Torn) component).getHoraInici());
+                torn.setAttribute("nom", ((Torn) component).getNom());
+                torn.appendChild(arrel);
+            }else if(component instanceof Projecte){
+                Element projecte = doc.createElement("projecte");
+                int codi = ((Projecte) component).getCodi();
+                projecte.setAttribute("codi", Integer.toString(codi));
+                projecte.setAttribute("nifClient", ((Projecte) component).getNifClient());
+                int finalitzat = booleanToInt (((Projecte)component).isFinalitzat());
+                projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
+                double pressupost = ((Projecte)component).getPressupost();
+                projecte.setAttribute("pressupost", Double.toString(pressupost));
+                projecte.appendChild(arrel);
+            
+            }
+            } 
         
+    
+        /*
+         while(iteradorComponents.hasNext()){
+            
+            
+            
+            if (component instanceof Dissenyador && tipusComponent == 1){
+                if (((Dissenyador)component).getNif().equals(id)){
+        */
+        
+        //Element projecte...
         //Element torn
-        Element torn = doc.createElement("torn");
-        torn.setAttribute("codi", "M01");
-        torn.setAttribute("horaAcabament", "17:00");
-        torn.setAttribute("horaInici", "8:00");
-        torn.setAttribute("nom", "Matí");
-        torn.appendChild(arrel);
+        
         
         //Element dissenyador
-        Element dissenyador = doc.createElement("dissenyador");
-        dissenyador.setAttribute("actiu", "1");
-        dissenyador.setAttribute("nif", "00000000A");
-        dissenyador.setAttribute("nom", "Pep Mesquida");
-        torn.appendChild(arrel);
+        
         
         //Element jardiner
-        Element jardiner = doc.createElement("jardiner");
-        dissenyador.setAttribute("actiu", "1");
-        dissenyador.setAttribute("nif", "00000000A");
-        dissenyador.setAttribute("nom", "Pep Mesquida");
-        torn.appendChild(arrel);
+        
         
         //Element tornJardiner
         Element tornJardiner = doc.createElement("torn");
@@ -162,5 +195,17 @@ public class GestorXML {
      */
     private void fitxerEstudi() throws GestorEstudisException {
         
+    }
+    public int booleanToInt(boolean value) {
+        // Convert true to 1 and false to 0.
+        return value ? 1 : 0;
+    }
+    public void dissenyadorToXML(Component comp, Node node ){
+                Element dissenyador = doc.createElement("dissenyador");
+                int actiu = booleanToInt (((Dissenyador)comp).getActiu());
+                dissenyador.setAttribute("actiu", Integer.toString(actiu));
+                dissenyador.setAttribute("nif",((Dissenyador) comp).getNif());
+                dissenyador.setAttribute("nom", ((Dissenyador) comp).getNom());
+                dissenyador.appendChild(node);
     }
 }
