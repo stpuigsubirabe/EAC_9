@@ -88,61 +88,13 @@ public class GestorXML {
             if (component instanceof Dissenyador){
                 dissenyadorToXML(component,arrel);
             }else if(component instanceof Jardiner){
-                Element jardiner = doc.createElement("jardiner");
-                int actiu = booleanToInt (((Jardiner)component).getActiu());
-                jardiner.setAttribute("actiu",  Integer.toString(actiu));
-                jardiner.setAttribute("nif", ((Jardiner) component).getNif());
-                jardiner.setAttribute("nom", ((Jardiner) component).getNom());
-                jardiner.appendChild(arrel);
+                jardinerToXML(component,arrel);
             }else if(component instanceof Torn){
-                Element torn = doc.createElement("torn");
-                torn.setAttribute("codi", ((Torn) component).getCodi());
-                torn.setAttribute("horaAcabament", ((Torn) component).getHoraAcabament());
-                torn.setAttribute("horaInici", ((Torn) component).getHoraInici());
-                torn.setAttribute("nom", ((Torn) component).getNom());
-                torn.appendChild(arrel);
+                tornToXML(component,arrel);
             }else if(component instanceof Projecte){
-                Element projecte = doc.createElement("projecte");
-                int codi = ((Projecte) component).getCodi();
-                projecte.setAttribute("codi", Integer.toString(codi));
-                projecte.setAttribute("nifClient", ((Projecte) component).getNifClient());
-                int finalitzat = booleanToInt (((Projecte)component).isFinalitzat());
-                projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
-                double pressupost = ((Projecte)component).getPressupost();
-                projecte.setAttribute("pressupost", Double.toString(pressupost));
-                projecte.appendChild(arrel);
-            
+                projecteToXML(component,arrel);
             }
-            } 
-        
-    
-        /*
-         while(iteradorComponents.hasNext()){
-            
-            
-            
-            if (component instanceof Dissenyador && tipusComponent == 1){
-                if (((Dissenyador)component).getNif().equals(id)){
-        */
-        
-        //Element projecte...
-        //Element torn
-        
-        
-        //Element dissenyador
-        
-        
-        //Element jardiner
-        
-        
-        //Element tornJardiner
-        Element tornJardiner = doc.createElement("torn");
-        torn.setAttribute("codi", "M01");
-        torn.setAttribute("horaAcabament", "17:00");
-        torn.setAttribute("horaInici", "8:00");
-        torn.setAttribute("nom", "Matí");
-        torn.appendChild(jardiner);
-        
+        }                 
     }
 
     public void desarModel(String nomFitxer) throws GestorEstudisException {
@@ -201,11 +153,39 @@ public class GestorXML {
         return value ? 1 : 0;
     }
     public void dissenyadorToXML(Component comp, Node node ){
-                Element dissenyador = doc.createElement("dissenyador");
-                int actiu = booleanToInt (((Dissenyador)comp).getActiu());
-                dissenyador.setAttribute("actiu", Integer.toString(actiu));
-                dissenyador.setAttribute("nif",((Dissenyador) comp).getNif());
-                dissenyador.setAttribute("nom", ((Dissenyador) comp).getNom());
-                dissenyador.appendChild(node);
+        Element dissenyador = doc.createElement("dissenyador");
+        int actiu = booleanToInt (((Dissenyador)comp).getActiu());
+        dissenyador.setAttribute("actiu", Integer.toString(actiu));
+        dissenyador.setAttribute("nif",((Dissenyador) comp).getNif());
+        dissenyador.setAttribute("nom", ((Dissenyador) comp).getNom());
+        dissenyador.appendChild(node);
     }
+    public void jardinerToXML(Component comp, Node node ){
+        Element jardiner = doc.createElement("jardiner");
+        int actiu = booleanToInt (((Jardiner)comp).getActiu());
+        jardiner.setAttribute("actiu",  Integer.toString(actiu));
+        jardiner.setAttribute("nif", ((Jardiner) comp).getNif());
+        jardiner.setAttribute("nom", ((Jardiner) comp).getNom());
+        jardiner.appendChild(node);
+    }
+    public void tornToXML(Component comp, Node node ){
+        Element torn = doc.createElement("torn");
+        torn.setAttribute("codi", ((Torn) comp).getCodi());
+        torn.setAttribute("horaAcabament", ((Torn) comp).getHoraAcabament());
+        torn.setAttribute("horaInici", ((Torn) comp).getHoraInici());
+        torn.setAttribute("nom", ((Torn) comp).getNom());
+        torn.appendChild(node);
+    }
+    public void projecteToXML(Component comp, Node node ){
+        Element projecte = doc.createElement("projecte");
+                int codi = ((Projecte) comp).getCodi();
+                projecte.setAttribute("codi", Integer.toString(codi));
+                projecte.setAttribute("nifClient", ((Projecte) comp).getNifClient());
+                int finalitzat = booleanToInt (((Projecte)comp).isFinalitzat());
+                projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
+                double pressupost = ((Projecte)comp).getPressupost();
+                projecte.setAttribute("pressupost", Double.toString(pressupost));
+                projecte.appendChild(node);
+    }
+    
 }
