@@ -24,14 +24,7 @@ public class Estudi implements Component {
     private String nom;
     private String adreca;
     private List <Component> components = new ArrayList <>();
-    //Declarem un iterador per poder operar el ArrayList components. 
-    //NO PODEM DEIXAR EL ITERADOR OBERT SI NO NO DEIXA ESCRIURE DINS LA COLECCIO
-    //private Iterator<Component> iteradorComponents = components.iterator();
-
-/* AIXO DESAPAREIX AMB LA NOVA IMPLEMENTACIO
-    private Component[] components = new Component[160];
-    private int posicioComponents = 0; //Priemra posició buida del vector components
-*/
+    
     /*
      TODO
      CONSTRUCTOR
@@ -97,20 +90,7 @@ public class Estudi implements Component {
 
     public void setComponents(List <Component> components) {
         this.components = components;
-    }
-   
-
-    /* AQUESTS METODES DESAPAREIXEN ARA FEM SERVIR L'ITERADOR
-    ----------------------------------------------------------------------------
-    public int getPosicioComponents() {
-        return posicioComponents;
-    }
-    
-    public void setPosicioComponents(int posicioComponents) {
-        this.posicioComponents = posicioComponents;
-    }
-    */
-    
+    }    
     /*
     TODO
      Paràmetres: cap
@@ -179,17 +159,18 @@ public class Estudi implements Component {
      dissenyador.
      Retorn: cap
      */
-    public void addDissenyador() {
-
-        Dissenyador nouDissenyador = Dissenyador.addDissenyador();
+    public void addDissenyador(Dissenyador dissenyador) {
         
-        if (selectComponent(1, nouDissenyador.getNif()) == -1) {            
-            components.add(nouDissenyador);            
-        } else {
-            System.out.println("\nEl dissenyador o dissenyadora ja existeix");
+        if (dissenyador == null){
+            dissenyador = Dissenyador.addDissenyador();    
+        }else{ 
+            if (selectComponent(1, dissenyador.getNif()) == -1) {            
+            components.add(dissenyador);            
+            } else {
+                System.out.println("\nEl dissenyador o dissenyadora ja existeix");
+            }
         }
     }
-
     /*
      JARDINER
      */
@@ -206,14 +187,15 @@ public class Estudi implements Component {
      jardiner o jardinera.
      Retorn: cap
      */
-    public void addJardiner() {
-
-        Jardiner nouJardiner = Jardiner.addJardiner();
-
-        if (selectComponent(2, nouJardiner.getNif()) == -1) {
-            components.add(nouJardiner);
-        } else {
-            System.out.println("\nEl jardiner o jardinera ja existeix");
+    public void addJardiner(Jardiner jardiner) {
+        
+        if (jardiner == null){
+            jardiner = Jardiner.addJardiner();
+        }else        
+            if (selectComponent(2, jardiner.getNif()) == -1) {
+                components.add(jardiner);
+            } else {
+                System.out.println("\nEl jardiner o jardinera ja existeix");
         }
     }
 
@@ -231,17 +213,18 @@ public class Estudi implements Component {
      - mostra el missatge "El torn ja existeix" si no s'ha afegit el torn.
      Retorn: cap
      */
-    public void addTorn() {
-
-        Torn nouTorn = Torn.addTorn();
-
-        if (selectComponent(3, nouTorn.getCodi()) == -1) {
-            components.add(nouTorn);    
-        } else {
+    public void addTorn(Torn torn) {
+        
+        if (torn == null){
+            torn = Torn.addTorn();
+        }else{
+            if (selectComponent(3, torn.getCodi()) == -1) {
+                components.add(torn);    
+            } else {
             System.out.println("\nEl torn ja existeix");
+            }
         }
     }
-
     /*
      PROJECTE
      */
@@ -317,37 +300,9 @@ public class Estudi implements Component {
                 if (((Projecte)component).getCodi()== Integer.parseInt((String)id)){
                     return components.indexOf(component);
                 }
-                
             }
-        }
-        
-        /* AQUEST CODI DESAPAREIX AMB LA NOVA IMPELMENTACIO
-        ------------------------------------------------------------------------
-        
-        for (int i = 0; i < posicioComponents; i++) {
-            if (components[i] instanceof Dissenyador && tipusComponent == 1) {
-                if (((Dissenyador) components[i]).getNif().equals(id)) {
-                    return i;
-                }
-            } else if (components[i] instanceof Jardiner && tipusComponent == 2) {
-                if (((Jardiner) components[i]).getNif().equals(id)) {
-                    return i;
-                }
-            } else if (components[i] instanceof Torn && tipusComponent == 3) {
-                if (((Torn) components[i]).getCodi().equals(id)) {
-                    return i;
-                }
-            } else if (components[i] instanceof Projecte && tipusComponent == 4) {
-                if (((Projecte) components[i]).getCodi() == (Integer) id) {
-                    return i;
-                }
-            }
-        }
-        */
-        
-        
-        return posElement;
-        
+        }      
+        return posElement;        
     }
 
     public void addTornJardiner() throws GestorEstudisException {

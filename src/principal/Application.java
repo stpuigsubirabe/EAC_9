@@ -196,13 +196,13 @@ public class Application {
                 case 1:
                     switch (tipus) {
                         case 1:
-                            estudiActual.addDissenyador();
+                            estudiActual.addDissenyador(null);
                             break;
                         case 2:
-                            estudiActual.addJardiner();
+                            estudiActual.addJardiner(null);
                             break;
                         case 3:
-                            estudiActual.addTorn();
+                            estudiActual.addTorn(null);
                             break;
                     }
                     break;
@@ -231,26 +231,9 @@ public class Application {
                             }else if (comp instanceof Torn && tipus == 3){
                                 //try{
                                     ((Torn)comp).showComponent();
-                                //}catch(GestorEstudisException e){System.out.println(e.getMessage());}
-                            
+                                //}catch(GestorEstudisException e){System.out.println(e.getMessage());}  
                             }
-                        } 
-                        
-                    /* AQUEST CODI DESAPAREIX AMB LES NOVES IMPLEMENTACIONS
-        ---------------------------------------------------------------------------------------
-                            
-                        for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
-                            if (estudiActual.getComponents()[i] instanceof Dissenyador && tipus == 1) {
-                                try{
-                                estudiActual.getComponents()[i].showComponent();
-                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
-                            } else if (estudiActual.getComponents()[i] instanceof Torn && tipus == 3) {
-                                try{
-                                estudiActual.getComponents()[i].showComponent();
-                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
-                            }
-                        }
-                    */    
+                        }   
                     }
                        
                     break;
@@ -264,17 +247,6 @@ public class Application {
                                 }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                             }
                     }
-                    /*
-                    AQUEST CODI DESAPAREIX AMB LA NOVA IMPLEMENTACIO
---------------------------------------------------------------------------------                    
-                    for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
-                        if (estudiActual.getComponents()[i] instanceof Jardiner) {
-                            try{
-                                estudiActual.getComponents()[i].showComponent();
-                            }catch(GestorEstudisException e){ System.out.println(e.getMessage());}
-                        }
-                    }
-                    */
                     break;
                 default:
                     System.out.println("\nS'ha de seleccionar una opció correcta del menú.");
@@ -348,16 +320,7 @@ public class Application {
                                 }catch(GestorEstudisException e){System.out.println(e.getMessage());}
                                 
                             }
-                    }        
-                    /* aquest codi desapareix amb la nova implementacio
---------------------------------------------------------------------------------                    
-                    
-                    for (int i = 0; i < estudiActual.getPosicioComponents(); i++) {
-                        if (estudiActual.getComponents()[i] instanceof Projecte) {
-                            estudiActual.getComponents()[i].showComponent();
-                        }
-                    }
-                    */    
+                    }          
                     break;
                 default:
                     System.out.println("\nS'ha de seleccionar una opció correcta del menú.");

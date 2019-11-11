@@ -1,6 +1,8 @@
 package persistencia;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -10,6 +12,9 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import principal.Estudi;
 import principal.GestorEstudisException;
+import org.w3c.dom.Element;
+import principal.Component;
+
 
 /**
  *
@@ -59,6 +64,51 @@ public class GestorXML {
      *Retorn: cap
      */
     public void construeixModel(Estudi estudi) throws GestorEstudisException {
+        
+        //Recullim els components de l'estudi.
+         List <Component> components = estudi.getComponents();
+        //Declarem un iterador per poder llegir els components
+         Iterator<Component> iteradorComponents = components.iterator();
+        
+        
+        //Element arrel l'estudi
+        Element arrel = doc.createElement("estudi");
+        arrel.setAttribute("adreca", estudi.getAdreca());
+        arrel.setAttribute("codi", Integer.toString(estudi.getCodi()));
+        arrel.setAttribute("nom", estudi.getNom());
+        doc.appendChild(arrel);
+        
+        //Empezamos a leer elements para plasmar en doc todo el estudi 
+        
+        //Element torn
+        Element torn = doc.createElement("torn");
+        torn.setAttribute("codi", "M01");
+        torn.setAttribute("horaAcabament", "17:00");
+        torn.setAttribute("horaInici", "8:00");
+        torn.setAttribute("nom", "Matí");
+        torn.appendChild(arrel);
+        
+        //Element dissenyador
+        Element dissenyador = doc.createElement("dissenyador");
+        dissenyador.setAttribute("actiu", "1");
+        dissenyador.setAttribute("nif", "00000000A");
+        dissenyador.setAttribute("nom", "Pep Mesquida");
+        torn.appendChild(arrel);
+        
+        //Element jardiner
+        Element jardiner = doc.createElement("jardiner");
+        dissenyador.setAttribute("actiu", "1");
+        dissenyador.setAttribute("nif", "00000000A");
+        dissenyador.setAttribute("nom", "Pep Mesquida");
+        torn.appendChild(arrel);
+        
+        //Element tornJardiner
+        Element tornJardiner = doc.createElement("torn");
+        torn.setAttribute("codi", "M01");
+        torn.setAttribute("horaAcabament", "17:00");
+        torn.setAttribute("horaInici", "8:00");
+        torn.setAttribute("nom", "Matí");
+        torn.appendChild(jardiner);
         
     }
 
