@@ -27,7 +27,7 @@ public class Projecte implements Component {
     private double pressupost;
     private Map <String,Treballador> treballadors = new HashMap <>();
     //Declarem un iterador per poder operar el HashMap treballadors.
-    Iterator iteradorTreballadors = treballadors.keySet().iterator();
+   // Iterator iteradorTreballadors = treballadors.keySet().iterator();
     /* AIXO DESAPAREIX AMB LA NOVA IMPLEMENTACIO
     private Treballador[] treballadors = new Treballador[41];
     private int posicioTreballadors = 0; //Primera posició buida del vector treballadors
@@ -206,6 +206,9 @@ public class Projecte implements Component {
     }
     @Override
     public void showComponent() throws GestorEstudisException {
+        // Creem un iterador per recorrer el hashMap
+        Iterator iteradorTreballadors = treballadors.keySet().iterator();
+        
         System.out.println("\nLes dades del projecte amb codi " + codi + " són:");
         System.out.println("\nNIF client: " + nifClient);
         System.out.println("\nPressupost: " + pressupost);

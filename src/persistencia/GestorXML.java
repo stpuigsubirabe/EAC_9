@@ -17,6 +17,8 @@ import principal.Component;
 import components.Dissenyador;
 import components.Jardiner;
 import components.Torn;
+import components.Treballador;
+import java.util.Map;
 import principal.Projecte;
 import org.w3c.dom.Node;
 
@@ -177,6 +179,10 @@ public class GestorXML {
         jardiner.setAttribute("nif", ((Jardiner) comp).getNif());
         jardiner.setAttribute("nom", ((Jardiner) comp).getNom());
         jardiner.appendChild(node);
+        if (((Jardiner)comp).getTorn()!= null){
+            Component torn = ((Jardiner)comp).getTorn();
+            tornToXML(torn,jardiner);
+        }
     }
     /*
     Construeix model per als torns
@@ -194,14 +200,31 @@ public class GestorXML {
     */
     public void projecteToXML(Component comp, Node node ){
         Element projecte = doc.createElement("projecte");
-                int codi = ((Projecte) comp).getCodi();
-                projecte.setAttribute("codi", Integer.toString(codi));
-                projecte.setAttribute("nifClient", ((Projecte) comp).getNifClient());
-                int finalitzat = booleanToInt (((Projecte)comp).isFinalitzat());
-                projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
-                double pressupost = ((Projecte)comp).getPressupost();
-                projecte.setAttribute("pressupost", Double.toString(pressupost));
-                projecte.appendChild(node);
+        int codi = ((Projecte) comp).getCodi();
+        projecte.setAttribute("codi", Integer.toString(codi));
+        projecte.setAttribute("nifClient", ((Projecte) comp).getNifClient());
+        int finalitzat = booleanToInt (((Projecte)comp).isFinalitzat());
+        projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
+        double pressupost = ((Projecte)comp).getPressupost();
+        projecte.setAttribute("pressupost", Double.toString(pressupost));
+        projecte.appendChild(node);
+        
+        // Recullim el hashMap del projecte i creem un iterador
+        Map <String,Treballador> treballadors = ((Projecte)comp).getTreballadors();
+        Iterator iteradorTreballadors = treballadors.keySet().iterator();
+        
+        if (treballadors.isEmpty() == false){
+            
+            while (iteradorTreballadors.hasNext()){
+                String key = (String) iteradorTreballadors.next();
+                Component treballador = treballadors.get(key);
+                if (key.equals("dissenyador")){
+                    dissenyadorToXML(treballador,projecte);
+                }else{
+                    jardinerToXML(treballador,projecte);
+                }
+            }
+        }
     }
     
 }
