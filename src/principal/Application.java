@@ -312,14 +312,10 @@ public class Application {
                 case 5:
                     Iterator<Component> iteradorComponents = estudiActual.getComponents().iterator();
                     while (iteradorComponents.hasNext()){
-                            if (iteradorComponents.next() instanceof Projecte){
-                                try{
-                                    for (int i=0;i<(estudiActual.getComponents().size());i++){
-                                        (estudiActual.getComponents().get(i)).showComponent();
-                                    }
-                                }catch(GestorEstudisException e){System.out.println(e.getMessage());}
-                                
-                            }
+                        Component comp = iteradorComponents.next();
+                            if ( comp instanceof Projecte){ 
+                              ((Projecte)comp).showComponent();                                    
+                            }        
                     }          
                     break;
                 default:
