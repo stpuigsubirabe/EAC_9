@@ -161,16 +161,13 @@ public class Estudi implements Component {
      */
     public void addDissenyador(Dissenyador dissenyador) {
         
-        if (dissenyador == null){
-            dissenyador = Dissenyador.addDissenyador();
-            components.add(dissenyador);
-        }else{ 
-            if (selectComponent(1, dissenyador.getNif()) == -1) {            
-            components.add(dissenyador);            
-            } else {
-                System.out.println("\nEl dissenyador o dissenyadora ja existeix");
-            }
-        }
+        if (dissenyador == null){dissenyador = Dissenyador.addDissenyador();}
+        
+        if (selectComponent(1, dissenyador.getNif()) == -1) {            
+        components.add(dissenyador);            
+        } else {
+            System.out.println("\nEl dissenyador o dissenyadora ja existeix");
+        }    
     }
     /*
      JARDINER
@@ -190,14 +187,12 @@ public class Estudi implements Component {
      */
     public void addJardiner(Jardiner jardiner) {
         
-        if (jardiner == null){
-            jardiner = Jardiner.addJardiner();
+        if (jardiner == null){ jardiner = Jardiner.addJardiner();} 
+        
+        if (selectComponent(2, jardiner.getNif()) == -1) {
             components.add(jardiner);
-        }else        
-            if (selectComponent(2, jardiner.getNif()) == -1) {
-                components.add(jardiner);
-            } else {
-                System.out.println("\nEl jardiner o jardinera ja existeix");
+        } else {
+            System.out.println("\nEl jardiner o jardinera ja existeix");
         }
     }
 
@@ -217,16 +212,11 @@ public class Estudi implements Component {
      */
     public void addTorn(Torn torn) {
         
-        if (torn == null){
-            torn = Torn.addTorn();
-            components.add(torn);
-        }else{
-            if (selectComponent(3, torn.getCodi()) == -1) {
-                components.add(torn);    
-            } else {
-            System.out.println("\nEl torn ja existeix");
-            }
-        }
+        if (torn == null){torn = Torn.addTorn();}
+            
+        if (selectComponent(3, torn.getCodi()) == -1) {
+            components.add(torn);    
+        } else {System.out.println("\nEl torn ja existeix");}        
     }
     /*
      PROJECTE
@@ -243,11 +233,11 @@ public class Estudi implements Component {
      - mostra el missatge "El projecte ja existeix" si no s'ha afegit el projecte.
      Retorn: cap
      */
-    public void addProjecte() {
-
-        Projecte nouProjecte = Projecte.addProjecte();
-
-        if (selectComponent(4, nouProjecte.getCodi()) == -1) {
+    public void addProjecte(Projecte nouProjecte) {
+        
+        if(nouProjecte == null){nouProjecte = Projecte.addProjecte();}
+        
+        if(selectComponent(4, nouProjecte.getCodi()) == -1) {
             components.add(nouProjecte);
         } else {
             System.out.println("\nEl projecte ja existeix");

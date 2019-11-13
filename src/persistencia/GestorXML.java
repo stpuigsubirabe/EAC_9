@@ -218,12 +218,29 @@ public class GestorXML {
                     String nomTorn = ((Element)torn).getAttribute("nom");
                     Torn tornAssignat = new Torn(codi, nom, horaInici, horaAcabament);
                     try{
-                    estudi.addTornJardiner();
+                    estudi.addTornJardiner();// Falta un metode
                     }catch (GestorEstudisException e){}
                     
                 }
             }
         }
+    }
+    public void XMLtoProjecte(Element arrel){
+        NodeList llista = arrel.getElementsByTagName("projecte");
+        for (int i = 0; i < llista.getLength(); i++){
+            Element elem = (Element)llista.item(i);
+            int codi = Integer.parseInt(elem.getAttribute("codi"));
+            String nifClient = elem.getAttribute("nifClient");
+            String finalitzat = elem.getAttribute("finalitzat");
+            // sha de convertir en boolean
+            double pressupost = Double.parseDouble(elem.getAttribute("pressupost"));
+            // sha de convertir en dooble
+        
+            // es declara sense finalitzat
+            Projecte proj = new Projecte( codi,  nifClient,  pressupost);
+            if (finalitzat.equals("1")){proj.setFinalitzat(true);}
+            estudi.addProjecte(proj);
+        }   
     }
     /*
     Retorna 1 si es actiu 0 si es no actiu

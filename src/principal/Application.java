@@ -293,7 +293,7 @@ public class Application {
                 case 0:
                     break;
                 case 1:
-                    estudiActual.addProjecte();
+                    estudiActual.addProjecte(null);
                     break;
                 case 2:
                     int indexSel = estudiActual.selectComponent(4, null);
