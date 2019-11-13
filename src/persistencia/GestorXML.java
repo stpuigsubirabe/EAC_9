@@ -253,7 +253,7 @@ public class GestorXML {
         jardiner.setAttribute("actiu",  Integer.toString(actiu));
         jardiner.setAttribute("nif", ((Jardiner) comp).getNif());
         jardiner.setAttribute("nom", ((Jardiner) comp).getNom());
-        jardiner.appendChild(node);
+        node.appendChild(jardiner);
         if (((Jardiner)comp).getTorn()!= null){
             Component torn = ((Jardiner)comp).getTorn();
             tornToXML(torn,jardiner);
@@ -268,7 +268,7 @@ public class GestorXML {
         torn.setAttribute("horaAcabament", ((Torn) comp).getHoraAcabament());
         torn.setAttribute("horaInici", ((Torn) comp).getHoraInici());
         torn.setAttribute("nom", ((Torn) comp).getNom());
-        torn.appendChild(node);
+        node.appendChild(torn);
     }
     /*
     Construeix model per als projectes
@@ -282,7 +282,7 @@ public class GestorXML {
         projecte.setAttribute("finalitzat", Integer.toString(finalitzat));
         double pressupost = ((Projecte)comp).getPressupost();
         projecte.setAttribute("pressupost", Double.toString(pressupost));
-        projecte.appendChild(node);
+        node.appendChild(projecte);
         
         // Recullim el hashMap del projecte i creem un iterador
         Map <String,Treballador> treballadors = ((Projecte)comp).getTreballadors();
