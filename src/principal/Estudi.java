@@ -162,7 +162,8 @@ public class Estudi implements Component {
     public void addDissenyador(Dissenyador dissenyador) {
         
         if (dissenyador == null){
-            dissenyador = Dissenyador.addDissenyador();    
+            dissenyador = Dissenyador.addDissenyador();
+            components.add(dissenyador);
         }else{ 
             if (selectComponent(1, dissenyador.getNif()) == -1) {            
             components.add(dissenyador);            
@@ -191,6 +192,7 @@ public class Estudi implements Component {
         
         if (jardiner == null){
             jardiner = Jardiner.addJardiner();
+            components.add(jardiner);
         }else        
             if (selectComponent(2, jardiner.getNif()) == -1) {
                 components.add(jardiner);
@@ -217,6 +219,7 @@ public class Estudi implements Component {
         
         if (torn == null){
             torn = Torn.addTorn();
+            components.add(torn);
         }else{
             if (selectComponent(3, torn.getCodi()) == -1) {
                 components.add(torn);    

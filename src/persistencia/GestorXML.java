@@ -22,6 +22,7 @@ import java.util.Map;
 import principal.Projecte;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  *
@@ -76,6 +77,14 @@ public class GestorXML {
          List <Component> components = estudi.getComponents();
         //Declarem un iterador per poder llegir els components
          Iterator<Component> iteradorComponents = components.iterator();
+        
+         //Creació del document
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        try{
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
+        doc = builder.newDocument();
+        }catch(ParserConfigurationException e)
+        {throw new GestorEstudisException("GestorXML.model");}
         
         
         //Element arrel l'estudi
@@ -233,7 +242,7 @@ public class GestorXML {
         dissenyador.setAttribute("actiu", Integer.toString(actiu));
         dissenyador.setAttribute("nif",((Dissenyador) comp).getNif());
         dissenyador.setAttribute("nom", ((Dissenyador) comp).getNom());
-        dissenyador.appendChild(node);
+        node.appendChild(dissenyador);
     }
     /*
     Construeix model per als jardiners
