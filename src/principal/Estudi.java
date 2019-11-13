@@ -297,7 +297,7 @@ public class Estudi implements Component {
                     return components.indexOf(component);
                 }
             }else if (component instanceof Projecte && tipusComponent == 4 ){    
-                if (((Projecte)component).getCodi()== Integer.parseInt((String)id)){
+                if (((Projecte)component).getCodi()== Integer.parseInt(String.valueOf(id))){
                     return components.indexOf(component);
                 }
             }

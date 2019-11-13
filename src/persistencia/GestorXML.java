@@ -21,6 +21,7 @@ import components.Treballador;
 import java.util.Map;
 import principal.Projecte;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -148,7 +149,72 @@ public class GestorXML {
      *Retorn: cap
      */
     private void fitxerEstudi() throws GestorEstudisException {
+        Element arrel = doc.getDocumentElement();
+        String adreca = arrel.getAttribute("adreca");
+        Integer codi = Integer.parseInt(arrel.getAttribute("codi"));
+        String nom = arrel.getAttribute("nom");
         
+        Estudi estudi = new Estudi(codi,nom,adreca);
+        // Creem l'objecte estudi
+        setEstudi(estudi);
+        XMLtoDissenyador(arrel);
+        XMLtoTorn(arrel);
+        // Recollim tots els elements del tipus dissenyador
+        
+        // Recollim tots els elements de tipus torn
+        
+    }
+    public void XMLtoDissenyador(Element arrel){
+        NodeList llista = arrel.getElementsByTagName("dissenyador");
+        for (int i = 0; i < llista.getLength(); i++){
+            Element elem = (Element)llista.item(i);
+            String nif = elem.getAttribute("nif");
+            String nomDis = elem.getAttribute("nom");
+            Dissenyador dis = new Dissenyador(nif,nomDis);
+            estudi.addDissenyador(dis); 
+        }
+    }
+    public void XMLtoTorn(Element arrel){
+        NodeList llista = arrel.getElementsByTagName("torn");
+        for (int i = 0; i < llista.getLength(); i++){
+            Element elem = (Element)llista.item(i);
+            String codi = elem.getAttribute("codi");
+            String horaAcabament = elem.getAttribute("horaAcabament");
+            String horaInici = elem.getAttribute("horaInici");
+            String nom = elem.getAttribute("nom");
+            // Si el torn no es troba a components l'afegim
+            if(estudi.selectComponent(3,codi)== -1){
+                Torn torn = new Torn(codi, nom, horaInici, horaAcabament);
+                estudi.addTorn(torn);
+            }
+        }
+    }
+    public void XMLtoJardiner(Element arrel){
+        NodeList llista = arrel.getElementsByTagName("jardiner");
+        for (int i = 0; i < llista.getLength(); i++){
+            Element elem = (Element)llista.item(i);
+            String nif = elem.getAttribute("nif");
+            String nom = elem.getAttribute("nom");
+            
+            Jardiner jar = new Jardiner(nif,nom);
+            estudi.addJardiner(jar);
+            //El jardiner té torn assignat??
+            Node torn = elem.getFirstChild();
+            if (torn != null){
+                short tipusNode=torn.getNodeType();
+                if (tipusNode==torn.ELEMENT_NODE){
+                    String codi = ((Element)torn).getAttribute("codi");
+                    String horaAcabament = ((Element)torn).getAttribute("horaAcabament");
+                    String horaInici = ((Element)torn).getAttribute("horaInici");
+                    String nomTorn = ((Element)torn).getAttribute("nom");
+                    Torn tornAssignat = new Torn(codi, nom, horaInici, horaAcabament);
+                    try{
+                    estudi.addTornJardiner();
+                    }catch (GestorEstudisException e){}
+                    
+                }
+            }
+        }
     }
     /*
     Retorna 1 si es actiu 0 si es no actiu
