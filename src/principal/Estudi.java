@@ -106,6 +106,7 @@ public class Estudi implements Component {
         String nom;
         String adreca;
         
+        System.out.println("[ ENTER ]");
         DADES.nextLine(); //NETEJA DE BUFFER
         System.out.println("Nom de l'estudi:");
         nom = DADES.nextLine();

@@ -166,81 +166,118 @@ public class GestorXML {
         Estudi estudi = new Estudi(codi,nom,adreca);
         // Creem l'objecte estudi
         setEstudi(estudi);
-        XMLtoDissenyador(arrel);
-        XMLtoTorn(arrel);
-        // Recollim tots els elements del tipus dissenyador
-        
-        // Recollim tots els elements de tipus torn
-        
-    }
-    public void XMLtoDissenyador(Element arrel){
-        NodeList llista = arrel.getElementsByTagName("dissenyador");
-        for (int i = 0; i < llista.getLength(); i++){
-            Element elem = (Element)llista.item(i);
-            String nif = elem.getAttribute("nif");
-            String nomDis = elem.getAttribute("nom");
-            Dissenyador dis = new Dissenyador(nif,nomDis);
-            estudi.addDissenyador(dis); 
-        }
-    }
-    public void XMLtoTorn(Element arrel){
-        NodeList llista = arrel.getElementsByTagName("torn");
-        for (int i = 0; i < llista.getLength(); i++){
-            Element elem = (Element)llista.item(i);
-            String codi = elem.getAttribute("codi");
-            String horaAcabament = elem.getAttribute("horaAcabament");
-            String horaInici = elem.getAttribute("horaInici");
-            String nom = elem.getAttribute("nom");
-            // Si el torn no es troba a components l'afegim
-            if(estudi.selectComponent(3,codi)== -1){
-                Torn torn = new Torn(codi, nom, horaInici, horaAcabament);
-                estudi.addTorn(torn);
-            }
-        }
-    }
-    public void XMLtoJardiner(Element arrel){
-        NodeList llista = arrel.getElementsByTagName("jardiner");
-        for (int i = 0; i < llista.getLength(); i++){
-            Element elem = (Element)llista.item(i);
-            String nif = elem.getAttribute("nif");
-            String nom = elem.getAttribute("nom");
-            
-            Jardiner jar = new Jardiner(nif,nom);
-            estudi.addJardiner(jar);
-            //El jardiner té torn assignat??
-            Node torn = elem.getFirstChild();
-            if (torn != null){
-                short tipusNode=torn.getNodeType();
-                if (tipusNode==torn.ELEMENT_NODE){
-                    String codi = ((Element)torn).getAttribute("codi");
-                    String horaAcabament = ((Element)torn).getAttribute("horaAcabament");
-                    String horaInici = ((Element)torn).getAttribute("horaInici");
-                    String nomTorn = ((Element)torn).getAttribute("nom");
-                    Torn tornAssignat = new Torn(codi, nom, horaInici, horaAcabament);
-                    try{
-                    estudi.addTornJardiner();// Falta un metode
-                    }catch (GestorEstudisException e){}
+        // Generem una llista amb tots els elements del document
+        NodeList componentsEstudi =  arrel.getChildNodes();
+        for(int i=0;i<componentsEstudi.getLength();i++){
+            Node component = componentsEstudi.item(i);
+            if (component.getNodeType() == Node.ELEMENT_NODE) {
+               Element nouComponent = (Element)component ;
+               if (nouComponent.getTagName().equals("dissenyador")){
+                  Dissenyador dis = XMLtoDissenyador(nouComponent);
+                  // Si el torn no es troba a components l'afegim
+                if(estudi.selectComponent(3,dis.getNif())== -1){estudi.addDissenyador(dis);}   
+               }
+               if (nouComponent.getTagName().equals("torn")){       
+                Torn torn = XMLtoTorn(nouComponent);
+                // Si el torn no es troba a components l'afegim
+                if(estudi.selectComponent(3,torn.getCodi())== -1){estudi.addTorn(torn);}
+               }
+               if (nouComponent.getTagName().equals("jardiner")){
+                   Jardiner jar = XMLtoJardiner(nouComponent);
+               //El jardiner té torn assignat??
+                    Node torn = nouComponent.getFirstChild();
+                    if (torn != null){
+                        if (torn.getNodeType() == torn.ELEMENT_NODE){
+                           Element tornJar = (Element)torn; 
+                           Torn tornJardiner = XMLtoTorn(tornJar);
+                            // Assignar el torn al jardiner
+                            jar.setTorn(tornJardiner);
+                       }
+                    }
+                     estudi.addJardiner(jar);
+               }
+               if (nouComponent.getTagName().equals("projecte")){
+                   Projecte proj = XMLtoProjecte(nouComponent);
+                   //El projecte te assignats treballadors?
+                   
+                   NodeList treballadors = nouComponent.getChildNodes();
+                if (treballadors != null){
+                    for(int j=0;j<treballadors.getLength();j++){
+                    Node treballador = treballadors.item(j);
+                   
+                    if (treballador.getNodeType() == Node.ELEMENT_NODE) {
+                        Element treballadorProj = (Element)treballador ;
                     
+                        if (treballadorProj.getTagName().equals("dissenyador")){
+                            Dissenyador dis = XMLtoDissenyador(treballadorProj);
+                                    proj.addTreballador(dis);}
+                        
+                        if (treballadorProj.getTagName().equals("jardiner")){
+                        Jardiner jar = XMLtoJardiner(nouComponent);
+                            //El jardiner té torn assignat??
+                            Node torn = treballadorProj.getFirstChild();
+                            if (torn != null){
+                                if (torn.getNodeType() == torn.ELEMENT_NODE){
+                                   Element tornJar = (Element)torn; 
+                                   Torn tornJardiner = XMLtoTorn(tornJar);
+                                    // Assignar el torn al jardiner
+                                    jar.setTorn(tornJardiner);
+                                }
+                            }
+                        proj.addTreballador(jar);
+                        }
+                   
+                   }
                 }
+                estudi.addProjecte(proj);
+               }
             }
         }
     }
-    public void XMLtoProjecte(Element arrel){
-        NodeList llista = arrel.getElementsByTagName("projecte");
-        for (int i = 0; i < llista.getLength(); i++){
-            Element elem = (Element)llista.item(i);
-            int codi = Integer.parseInt(elem.getAttribute("codi"));
-            String nifClient = elem.getAttribute("nifClient");
-            String finalitzat = elem.getAttribute("finalitzat");
-            // sha de convertir en boolean
-            double pressupost = Double.parseDouble(elem.getAttribute("pressupost"));
-            // sha de convertir en dooble
+    }    
         
-            // es declara sense finalitzat
+    public Dissenyador XMLtoDissenyador(Element nouComponent ){
+        
+        String nif = nouComponent.getAttribute("nif");
+        String nomDis = nouComponent.getAttribute("nom");
+        Dissenyador dis = new Dissenyador(nif,nomDis);
+        return dis;        
+    }
+    public Torn XMLtoTorn(Element nouComponent){
+           
+        String codi = nouComponent.getAttribute("codi");
+        String horaAcabament = nouComponent.getAttribute("horaAcabament");
+        String horaInici = nouComponent.getAttribute("horaInici");
+        String nom = nouComponent.getAttribute("nom");
+        // Si el torn no es troba a components l'afegim 
+          Torn torn = new Torn(codi, nom, horaInici, horaAcabament);
+          return torn;  
+        }
+    
+    public Jardiner XMLtoJardiner(Element nouComponent){
+        
+        String nif = nouComponent.getAttribute("nif");
+        String nom = nouComponent.getAttribute("nom");
+        Jardiner jar = new Jardiner(nif,nom);
+        return jar;        
+    }
+    public Projecte XMLtoProjecte(Element nouComponent){
+        
+            int codi = Integer.parseInt(nouComponent.getAttribute("codi"));
+            String nifClient = nouComponent.getAttribute("nifClient");
+            String finalitzat = nouComponent.getAttribute("finalitzat");
+            double pressupost = Double.parseDouble(nouComponent.getAttribute("pressupost"));
+        
             Projecte proj = new Projecte( codi,  nifClient,  pressupost);
             if (finalitzat.equals("1")){proj.setFinalitzat(true);}
-            estudi.addProjecte(proj);
-        }   
+            return proj; 
+             
+            
+            
+                    
+            
+            
+           
     }
     /*
     Retorna 1 si es actiu 0 si es no actiu
