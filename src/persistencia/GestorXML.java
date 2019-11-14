@@ -41,12 +41,18 @@ public class GestorXML {
     }
 
     public void desarEstudi(String nomFitxer, Estudi estudi) throws GestorEstudisException {
+        try{
         construeixModel(estudi);
+        }catch(Exception e){throw new GestorEstudisException("GestorXML.model"); }
+        try{
         desarModel(nomFitxer);
+        }catch(Exception e){throw new GestorEstudisException("GestorXML.desar"); }
     }
 
     public void carregarEstudi(String nomFitxer) throws GestorEstudisException {
+        try{
         carregarFitxer(nomFitxer);
+         }catch(Exception e){throw new GestorEstudisException("GestorXML.carrega"); }
         fitxerEstudi();
     }
 

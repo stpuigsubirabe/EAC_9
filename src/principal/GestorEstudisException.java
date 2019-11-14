@@ -56,6 +56,6 @@ public class GestorEstudisException extends Exception {
 
     @Override
     public String getMessage() {
-        return "Error " + codiCausa + "/n" +  missatge;
+        return "Error " + codiCausa + "\n" +  missatge;
     }
 }
