@@ -175,7 +175,7 @@ public class GestorXML {
                if (nouComponent.getTagName().equals("dissenyador")){
                   Dissenyador dis = XMLtoDissenyador(nouComponent);
                   // Si el torn no es troba a components l'afegim
-                if(estudi.selectComponent(3,dis.getNif())== -1){estudi.addDissenyador(dis);}   
+                if(estudi.selectComponent(1,dis.getNif())== -1){estudi.addDissenyador(dis);}   
                }
                if (nouComponent.getTagName().equals("torn")){       
                 Torn torn = XMLtoTorn(nouComponent);
@@ -213,7 +213,7 @@ public class GestorXML {
                                     proj.addTreballador(dis);}
                         
                         if (treballadorProj.getTagName().equals("jardiner")){
-                        Jardiner jar = XMLtoJardiner(nouComponent);
+                            Jardiner jar = XMLtoJardiner(treballadorProj);
                             //El jardiner té torn assignat??
                             Node torn = treballadorProj.getFirstChild();
                             if (torn != null){
